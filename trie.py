@@ -67,16 +67,18 @@ class Trie():
         elif prefix == branch["label"]:
             self.insert_aux(branch["child"], word[len(prefix):], value)
         else:
-            i = i if i < len(node.branches) else i - 1
+            i = 1 if i == 0 else i
             branch1 = {"label": word[len(prefix):], "child":
                         Node(None, [{"label": "$", "child": Node(value, [])}])}
             branch2 = {"label": branch["label"][len(prefix):], "child":
                         branch["child"]}
-            node.branches.pop(i)
+            node.branches.pop(i - 1)
             node.branches.append({"label": prefix, "child": \
                     Node(None, [branch1, branch2])})
             
     def insert(self,word,value):
+        # self.dump()
+        # print(word)
         if not self.root:
             self.root = Node(None, [{"label": word, "child": \
                         Node(None, [{"label": "$", "child": Node(value, [])}])}])
