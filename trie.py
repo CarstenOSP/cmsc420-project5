@@ -85,9 +85,39 @@ class Trie():
         else:
             self.insert_aux(self.root, word, value)
 
+    def delete_aux(self, node, parent, node_index, word, node_two_child, 
+                   parent_two_child, index_node_two_child, index_two_child):
+        if node.value:
+            # print(index_node_two_child)
+            # print(index_two_child)
+            node_two_child.branches.pop(index_two_child)
+            if len(node_two_child.branches) == 1:
+                label = parent_two_child.branches[index_node_two_child]["label"] + \
+                        node_two_child.branches[0]["label"]
+                child = node_two_child.branches[0]["child"]
+
+                parent_two_child.pop(index_node_two_child)
+                parent_two_child.branches.append({"label": label, "child": child})
+        else:
+            i = 0
+            branch = node.branches[0]
+            while not (prefix := self.find_prefix(word, branch["label"])):
+                i += 1
+                branch = node.branches[i]
+
+            if len(node.branches) > 1:
+                node_two_child = node
+                parent_two_child = parent
+                index_node_two_child = node_index
+                index_two_child = i
+            
+            self.delete_aux(branch["child"], node, i, word[len(prefix):],
+                            node_two_child, parent_two_child,
+                            index_node_two_child, index_two_child)
+
     # Delete the word and the associated value.
     def delete(self,word):
-        print("This is space-filler just so it runs. Delete this when you fill in the code.")
+        self.delete_aux(self.root, None, None, word + "$", None, None, None, None)
 
     def search_aux(self, node, word):
         if node.value:
