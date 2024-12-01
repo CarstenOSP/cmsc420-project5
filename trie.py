@@ -89,6 +89,18 @@ class Trie():
     def delete(self,word):
         print("This is space-filler just so it runs. Delete this when you fill in the code.")
 
+    def search_aux(self, node, word):
+        if node.value:
+            print(node.value)
+        else:
+            i = 0
+            branch = node.branches[0]
+            while not (prefix := self.find_prefix(word, branch["label"])):
+                branch = node.branches[i]
+                i += 1
+
+            self.search_aux(branch["child"], word[len(prefix):])
+
     # Search for the word and print the associated value.
     def search(self,word):
-        print("Replace this so the value is printed instead!")
+        self.search_aux(self.root, word + "$")
