@@ -96,7 +96,7 @@ class Trie():
                         node_two_child.branches[0]["label"]
                 child = node_two_child.branches[0]["child"]
 
-                parent_two_child.pop(index_node_two_child)
+                parent_two_child.branches.pop(index_node_two_child)
                 parent_two_child.branches.append({"label": label, "child": child})
         else:
             i = 0
