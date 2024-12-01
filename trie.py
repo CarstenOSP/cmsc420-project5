@@ -71,11 +71,12 @@ class Trie():
                         Node(None, [{"label": "$", "child": Node(value, [])}])}
             branch2 = {"label": branch["label"][len(prefix):], "child":
                         branch["child"]}
-            node.branches.pop(i)
+            node.branches.remove(branch)
             node.branches.append({"label": prefix, "child": \
                     Node(None, [branch1, branch2])})
             
     def insert(self,word,value):
+        print(word)
         if not self.root:
             self.root = Node(None, [{"label": word, "child": \
                         Node(None, [{"label": "$", "child": Node(value, [])}])}])
