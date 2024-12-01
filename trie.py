@@ -47,9 +47,40 @@ class Trie():
             dict_repr = _to_dict(self.root)
         print(json.dumps(dict_repr,indent = 2))
 
-    def insert(self,word,value):
-        print("This is space-filler just so it runs. Delete this when you fill in the code.")
+    def find_prefix(self, word, label):
+        i = 1
+        while word.startswith(label[:i]) and i <= len(label):
+            i += 1
+        return label[:(i-1)]
+    
+    def insert_aux(self, node, word, value):
+        i = 0
+        branch = node.branches[0]
+        while not (prefix := self.find_prefix(word, branch["label"])) \
+              and i < len(node.branches):
+            branch = node.branches[i]
+            i += 1
 
+        if not prefix:
+            node.branches.append({"label": word, "child": \
+                    Node(None, [{"label": "$", "child": Node(value, [])}])})
+        elif prefix == branch["label"]:
+            self.insert_aux(branch["child"], word[len(prefix):], value)
+        else:
+            branch1 = {"label": word[len(prefix):], "child":
+                        Node(None, [{"label": "$", "child": Node(value, [])}])}
+            branch2 = {"label": branch["label"][len(prefix):], "child":
+                        branch["child"]}
+            node.branches.pop(i)
+            node.branches.append({"label": prefix, "child": \
+                    Node(None, [branch1, branch2])})
+            
+    def insert(self,word,value):
+        if not self.root:
+            self.root = Node(None, [{"label": word, "child": \
+                        Node(None, [{"label": "$", "child": Node(value, [])}])}])
+        else:
+            self.insert_aux(self.root, word, value)
 
     # Delete the word and the associated value.
     def delete(self,word):
