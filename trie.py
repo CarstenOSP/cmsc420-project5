@@ -91,7 +91,7 @@ class Trie():
             # print(index_node_two_child)
             # print(index_two_child)
             node_two_child.branches.pop(index_two_child)
-            if len(node_two_child.branches) == 1:
+            if len(node_two_child.branches) == 1 and parent_two_child:
                 label = parent_two_child.branches[index_node_two_child]["label"] + \
                         node_two_child.branches[0]["label"]
                 child = node_two_child.branches[0]["child"]
